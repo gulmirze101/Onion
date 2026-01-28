@@ -15,5 +15,13 @@ namespace Onion.Business.Dtos.EmployeeDtos
         public string Position { get; set; } = string.Empty;
         public string ImagePath { get; set; } = string.Empty;
         public string DepartmentName { get; set; } = string.Empty;
+
+        public DateTime CreatedDate { get; set; }
+        public string CreatedBy { get; set; } = string.Empty;
+        public DateTime? UpdatedDate { get; set; }
+        public string? UpdatedBy { get; set; }
+        public DateTime? DeletedDate { get; set; }
+        public string? DeletedBy { get; set; }
+        public bool IsDeleted { get; set; } = false;
     }
 }

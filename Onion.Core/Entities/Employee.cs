@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Onion.Core.Entities
 {
-    public class Employee : BaseEntity
+    public class Employee : BaseAuditableEntity
     {
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;

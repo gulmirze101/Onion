@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Onion.DataAccess.Context;
+using Onion.DataAccess.Interceptor;
 using Onion.DataAccess.Repositories.Abstractions;
 using Onion.DataAccess.Repositories.Implementations;
 using System;
@@ -21,7 +22,8 @@ namespace Onion.DataAccess.ServiceRegistrations
             {
                 opt.UseSqlServer(configuration.GetConnectionString("Default"));
             });
-        
+            services.AddScoped<BaseAuditableInterceptor>();
+
             return services;
         }
     }

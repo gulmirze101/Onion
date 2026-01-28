@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Onion.Business.Dtos.DepartmentDtos;
+using Onion.Business.Dtos.ResultDtos;
 using Onion.Business.Exceptions;
 using Onion.Business.Services.Abstractions;
 using Onion.Core.Entities;
@@ -13,7 +14,7 @@ namespace Onion.Business.Services.Implementations
 {
     internal class DepartmentService(IDepartmentRepository _repository, IMapper _mapper) : IDepartmentService
     {
-        public async Task CreateAsync(DepartmentCreateDto dto)
+        public async Task<ResultDto> CreateAsync(DepartmentCreateDto dto)
         {
 
             var isExistDepartment = await _repository.AnyAsync(x => x.Name.ToLower() == dto.Name.ToLower());
@@ -26,9 +27,15 @@ namespace Onion.Business.Services.Implementations
 
             await _repository.AddAsync(department);
             await _repository.SaveChangesAsync();
+
+            return new ResultDto
+            {
+                IsSucced = true,
+                Message = "Department created successfully"
+            };
         }
 
-        public async Task DeleteAsync(Guid id)
+        public async Task<ResultDto> DeleteAsync(Guid id)
         {
             var department = await _repository.GetByIdAsync(id);
 
@@ -37,18 +44,22 @@ namespace Onion.Business.Services.Implementations
 
             _repository.DeleteAsync(department);
             await _repository.SaveChangesAsync();
+            return new ResultDto
+            {
+                IsSucced = true,
+                Message = "Department deleted successfully"
+            };
         }
 
-        public async Task<List<DepartmentGetDto>> GetAllAsync()
+        public async Task<ResultDto<List<DepartmentGetDto>>> GetAllAsync()
         {
             var departments = await _repository.GetAll().Include(x => x.Employees).ToListAsync();
 
             var dtos = _mapper.Map<List<DepartmentGetDto>>(departments);
-
-            return dtos;
+            return new() { Data = dtos };
         }
 
-        public async Task<DepartmentGetDto> GetByIdAsync(Guid id)
+        public async Task<ResultDto<DepartmentGetDto>> GetByIdAsync(Guid id)
         {
             var department = await _repository.GetByIdAsync(id);
 
@@ -56,11 +67,10 @@ namespace Onion.Business.Services.Implementations
                 throw new NotFoundException();
 
             var dto = _mapper.Map<DepartmentGetDto>(department);
-
-            return dto;
+            return new() { Data = dto };
         }
 
-        public async Task UpdateAsync(DepartmentUpdateDto dto)
+        public async Task<ResultDto> UpdateAsync(DepartmentUpdateDto dto)
         {
             var department = await _repository.GetByIdAsync(dto.Id);
 
@@ -76,6 +86,12 @@ namespace Onion.Business.Services.Implementations
 
             _repository.UpdateAsync(department);
             await _repository.SaveChangesAsync();
+
+            return new ResultDto
+            {
+                IsSucced = true,
+                Message = "Department updated successfully"
+            };
         }
     }
 }
