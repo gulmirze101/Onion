@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="Onion.Api/Onion.Api.csproj" Id="edf2496c-af24-4c8c-8fcc-4dc52f5d9a90" />
+  <Project Path="Onion.Business/Onion.Business.csproj" Id="a12e2a95-6d2d-47dd-b8ce-aea7a079f3d2" />
+  <Project Path="Onion.Core/Onion.Core.csproj" />
+  <Project Path="Onion.DataAccess/Onion.DataAccess.csproj" />
+</Solution>
