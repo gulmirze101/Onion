@@ -1,11 +1,13 @@
 using Onion.Api.Middlewares;
 using Onion.Business.ServiceRegistrations;
+using Onion.DataAccess.Abstractions;
 using Onion.DataAccess.ServiceRegistrations;
+using System.Threading.Tasks;
 namespace Onion.Api
 {
-    public class Program
+    public partial class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -27,8 +29,15 @@ namespace Onion.Api
             builder.Services.AddDataAccessServices(builder.Configuration);
 
             var app = builder.Build();
-            app.UseMiddleware<GlobalExceptionHandler>();
 
+
+            var scope = app.Services.CreateScope();
+            var initalizer = scope.ServiceProvider.GetRequiredService<IContextInitializer>();
+            await initalizer.InitDatabaseAsync();
+
+
+
+            app.UseMiddleware<GlobalExceptionHandler>();
             app.UseCors("MyPolicy");
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -45,7 +54,7 @@ namespace Onion.Api
 
             app.MapControllers();
 
-            app.Run();
+           await  app.RunAsync();
         }
     }
 }

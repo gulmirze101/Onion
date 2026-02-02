@@ -1,15 +1,16 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Identity.Client;
+using Onion.Core.Entities;
+using Onion.DataAccess.Interceptor;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
-using Onion.Core.Entities;
-using Onion.DataAccess.Interceptor;
 
 namespace Onion.DataAccess.Context  
 {
-    internal class AppDbContext(BaseAuditableInterceptor _interceptor, DbContextOptions options) : DbContext(options)
+    internal class AppDbContext(BaseAuditableInterceptor _interceptor, DbContextOptions options) : IdentityDbContext<AppUser, AppRole, string>(options)
     {
        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
